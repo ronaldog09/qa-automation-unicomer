@@ -1,0 +1,40 @@
+import { test } from '@playwright/test'; 
+import { CalcularCreditoPage } from '../../pages/CalcularCreditoPage';
+
+const escenarios = [
+    { 
+        tipo: 'Consumo', uso: 'Gastos personales', 
+        ingreso: 2500, monto: 20000, 
+        plazo: 8, plazoMin: 2, plazoMax: 10, 
+        tasa: 11.5, tasaMin: 8.5, tasaMax: 18.5
+    },
+    { 
+        tipo: 'Vivienda', uso: 'Compra de vivienda nueva o usada', 
+        ingreso: 4500, monto: 95000, 
+        plazo: 20, plazoMin: 5, plazoMax: 30, 
+        tasa: 7.95, tasaMin: 6.95, tasaMax: 9
+    },
+    { 
+        tipo: 'Vehículo', uso: 'Compra de vehículo nuevo', 
+        ingreso: 3000, monto: 25000, 
+        plazo: 6, plazoMin: 2, plazoMax: 8, 
+        tasa: 9, tasaMin: 8.5, tasaMax: 9 
+    } 
+];
+
+for (const escenario of escenarios) {
+    test(`Validar crédito de ${escenario.tipo}`, async ({ page }) => {
+        const credito = new CalcularCreditoPage(page);
+        await credito.open();
+        await credito.seleccionarTipoCredito(escenario.tipo as any);
+        await credito.seleccionarUsoCredito(escenario.uso);
+        await credito.ingresarIngresoMensual(escenario.ingreso);
+        await credito.ingresarMontoSolicitado(escenario.monto);
+        
+        // Pasamos el valor deseado junto con los rangos min/max del slider
+        await credito.seleccionarPlazo(escenario.plazo, escenario.plazoMin, escenario.plazoMax);
+        await credito.seleccionarTasa(escenario.tasa, escenario.tasaMin, escenario.tasaMax);
+
+        await credito.validarResultados();
+    });
+}

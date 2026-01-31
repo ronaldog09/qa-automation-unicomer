@@ -1,14 +1,19 @@
 {
+  "testName": "Validación Funcional y de Performance - Cat Facts",
   "endpoint": "GET /facts",
-  "validations": {
-    "statusCode200": true,
-    "responseNotEmpty": true,
-    "responseTimeUnder3000ms": true
-  },
+  "dateTime": "2026-01-31T01:35:26.868Z",
   "metrics": {
     "statusCode": 200,
-    "responseTimeMs": 299,
-    "dataLength": 10
+    "responseTimeMs": 277,
+    "totalRecords": 10
   },
-  "timestamp": "2026-01-30T04:05:43.718Z"
+  "validations": {
+    "isStatus200": true,
+    "isNotNull": true,
+    "isPerformanceOk": true
+  },
+  "sampleData": {
+    "fact": "Unlike dogs, cats do not have a sweet tooth. Scientists believe this is due to a mutation in a key taste receptor.",
+    "length": 114
+  }
 }
