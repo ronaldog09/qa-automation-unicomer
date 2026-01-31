@@ -8,7 +8,7 @@ test.describe('Cat Facts API EndPoint Test', () => {
         const endpoint = 'https://catfact.ninja/facts';
         const startTime = Date.now();
 
-        // 1. Ejecución de la petición
+        // Ejecución de la petición
         const respuesta = await request.get(endpoint, {
             headers: { 
                 'accept': 'application/json',
@@ -24,7 +24,7 @@ test.describe('Cat Facts API EndPoint Test', () => {
         // Validación STATUS CODE = 200
         expect(respuesta.status(), 'El Status Code debe ser 200').toBe(200);
 
-        // Validación Que no responda vacío y tenga la estructura esperada
+        // Validar que no responda vacío y tenga la estructura esperada
         expect(body, 'El cuerpo de la respuesta no debe ser nulo').toBeDefined();
         expect(Array.isArray(body.data), 'La propiedad "data" debe ser un arreglo').toBeTruthy();
         expect(body.data.length, 'La respuesta debe contener al menos un resultado').toBeGreaterThan(0);
@@ -32,7 +32,7 @@ test.describe('Cat Facts API EndPoint Test', () => {
         // Validación Performance - Respuesta en menos de 3000ms
         expect(responseTime, `El tiempo de respuesta (${responseTime}ms) excedió el límite de 3000ms`).toBeLessThan(3000);
 
-        // Preparación de Evidencia
+        // Archivo Evidencia
         const evidencia = {
             testName: 'Validación Funcional y de Performance - Cat Facts',
             endpoint: 'GET /facts',
@@ -50,7 +50,7 @@ test.describe('Cat Facts API EndPoint Test', () => {
             sampleData: body.data[0] // Guardamos el primer registro como se muestra
         };
 
-        // Exportamos resultados a carpeta evidenciasAPI
+        // Guardamos los resultados a carpeta evidenciasAPI
         const evidencePath = path.join(process.cwd(), 'evidenciaAPI');
         if (!fs.existsSync(evidencePath)) {
             fs.mkdirSync(evidencePath, { recursive: true });
@@ -61,7 +61,7 @@ test.describe('Cat Facts API EndPoint Test', () => {
             JSON.stringify(evidencia, null, 2)
         );
 
-        // Log en consola para validar que funciona desde la consola
-        console.log(`Test API ENDPOINT GET completado. Status Code: ${respuesta.status()}, Tiempo ejecutado: ${responseTime}ms`);
+        // Log en consola para validar que funciona y se muestre desde la consola
+        console.log(`Test API ENDPOINT GET Cat Facts completado. Status Code: ${respuesta.status()}, Tiempo ejecutado: ${responseTime}ms`);
     });
 });

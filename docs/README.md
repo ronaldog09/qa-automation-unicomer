@@ -29,13 +29,13 @@ Este proyecto contiene la automatización de pruebas para la Calculadora de Cré
 Se valida el contrato de la API, el código de estado (200 OK) y se garantiza un SLA de performance menor a 3000ms. Cada ejecución genera un reporte técnico detallado en la carpeta evidenciaAPI/.
 
 ## Comandos de ejecución
-- Instalar dependencias
+- Instalar dependencias: 
     npm install
-- Instalar navegadores de Playwright
+- Instalar navegadores de Playwright: 
     npx playwright install
-- Ejecutar todas las pruebas (UI + API)
+- Ejecutar todas las pruebas (UI + API): 
     npx playwright test --project=chromium --headed
-- Ejecutar solo la pruebas API
+- Ejecutar solo la pruebas API: 
     npx playwright test tests/api/catFactsEndPointAPI.spec.ts
-- Ver reporte de resultados
+- Ver reporte de resultados: 
     npx playwright show-report

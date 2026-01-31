@@ -1,10 +1,10 @@
 {
   "testName": "Validación Funcional y de Performance - Cat Facts",
   "endpoint": "GET /facts",
-  "dateTime": "2026-01-31T01:35:26.868Z",
+  "dateTime": "2026-01-31T02:18:54.558Z",
   "metrics": {
     "statusCode": 200,
-    "responseTimeMs": 277,
+    "responseTimeMs": 262,
     "totalRecords": 10
   },
   "validations": {

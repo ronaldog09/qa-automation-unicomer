@@ -11,7 +11,7 @@ export class CalcularCreditoPage {
 
     constructor(page: Page) {
         this.page = page;
-        // Selectores más robustos usando placeholder o etiquetas
+        // Inicializamos los selectores
         this.txtIngresoMensual = page.locator('input').first();
         this.txtMontoSolicitado = page.locator('input').nth(1);
         this.selectorPlazo = page.locator('mat-slider').first();
@@ -41,7 +41,7 @@ export class CalcularCreditoPage {
         // exact: false para evitar errores por espacios invisibles en el HTML
         const boton = this.page.getByRole('button', { name: uso, exact: false });
         await boton.click();
-        // Esperamos un momento a que la calculadora procese el cambio de formulario
+        // Esperamos a que la calculadora procese el cambio de formulario
         await this.page.waitForTimeout(1000);
     }
 
@@ -59,7 +59,7 @@ export class CalcularCreditoPage {
         await this.selectorPlazo.scrollIntoViewIfNeeded();
         const box = await this.selectorPlazo.boundingBox();
         if (box) {
-            // Calculamos la proporción: (valor deseado - mínimo) / (máximo - mínimo)
+            // Calculamos los valores a seleccionar de plazo
             const porcentaje = (plazo - min) / (max - min);
             const clickX = box.x + (box.width * porcentaje); 
             
@@ -72,6 +72,7 @@ export class CalcularCreditoPage {
         await this.selectorTasa.scrollIntoViewIfNeeded();
         const box = await this.selectorTasa.boundingBox();
         if (box) {
+            // Calculamos los valores a seleccionar de tasa
             const porcentaje = (tasa - min) / (max - min);
             const clickX = box.x + (box.width * porcentaje);
             
@@ -81,20 +82,17 @@ export class CalcularCreditoPage {
     }
 
     async validarResultados() {
-    // 1. Esperamos a que el texto principal de resultados sea visible
-    // Aumentamos el timeout porque el cálculo del banco a veces es lento
-    await expect(this.page.getByText('Monto máximo a financiar'), 'No se mostró el título de resultados').toBeVisible({ timeout: 15000 });
-
-    // 2. En lugar de buscar por clase CSS (.mat-card-content), 
-    // buscamos el párrafo que está justo después de los títulos informativos.
-    // Esto es mucho más robusto.
+    //Esperamos a que el texto Monto máximo a financiar sea visible
+      await expect(this.page.getByText('Monto máximo a financiar'), 'No se mostró el título de resultados').toBeVisible({ timeout: 15000 });
+    
+      // Localizadores de los resultados
     const monto = this.page.locator('p:below(:text("Monto máximo a financiar"))').first();
     const cuota = this.page.locator('p:below(:text("Cuota mensual"))').first();
 
-    // 3. Validamos que contengan el símbolo de dólar, lo que confirma que el cálculo se realizó
+    // Validamos que contengan el simbolo de $
     await expect(monto).toContainText('$', { timeout: 10000 });
     await expect(cuota).toContainText('$', { timeout: 10000 });
 
-    console.log("✅ Resultados validados correctamente en pantalla.");
+    console.log("Resultados validados correctamente");
 }
 }
