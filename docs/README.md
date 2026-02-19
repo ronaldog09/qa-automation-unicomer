@@ -39,3 +39,7 @@ Se valida el contrato de la API, el código de estado (200 OK) y se garantiza un
     npx playwright test tests/api/catFactsEndPointAPI.spec.ts
 - Ver reporte de resultados: 
     npx playwright show-report
+- Generar reporte de Allure: 
+    npx playwright show-report
+- Ver reporte de Allure: 
+    npm run allure:open
