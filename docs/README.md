@@ -9,7 +9,7 @@ Este proyecto contiene la automatización de pruebas para la Calculadora de Cré
 - Lenguaje: TypeScript
 - Editor: Visual Studio Code
 - Entorno: Node.js
-- Reportes: Playwright HTML Report
+- Reportes: Este proyecto utiliza Allure Report para generar reportes detallados de la ejecución de las pruebas, incluyendo pasos (steps), capturas de pantalla en caso de error y metadata del entorno.
 
 ## Esctructura del proyecto
 - pages/ Implementación del patrón Page Object Model (POM) para la UI.
