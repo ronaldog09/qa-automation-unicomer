@@ -1,4 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
+import * as allure from "allure-js-commons"; // Importamos para los steps
+import allureHelper from "../lib/allure-helper"; // Importamos tu helper
 
 export type TipoCredito = 'Consumo' | 'Vivienda' | 'Vehículo';
 
@@ -19,43 +21,51 @@ export class CalcularCreditoPage {
     }
 
     async open() {
-        await this.page.goto('https://www.bancocuscatlan.com/creditos/calculadora-creditos', { 
-            waitUntil: 'domcontentloaded', 
-            timeout: 60000 
+        await allure.step("Abrir calculadora de créditos", async () => {
+            await this.page.goto('https://www.bancocuscatlan.com/creditos/calculadora-creditos', { 
+                waitUntil: 'domcontentloaded', 
+                timeout: 60000 
+            });
+            const tituloCalculadora = this.page.getByText(/¿Qué tipo de Crédito buscas?/i);
+            await tituloCalculadora.waitFor({ state: 'visible', timeout: 30000 });
         });
-
-        const tituloCalculadora = this.page.getByText(/¿Qué tipo de Crédito buscas?/i);
-        await tituloCalculadora.waitFor({ state: 'visible', timeout: 30000 });
-
-        await this.page.waitForTimeout(1000); // Espera adicional para asegurar que la página esté completamente cargada
     }
 
     async seleccionarTipoCredito(tipo: TipoCredito) {
+        await allure.step(`Seleccionar tipo de crédito: ${tipo}`, async () => {
         // Buscamos el botón que contenga el texto del tipo de crédito
         const boton = this.page.locator('button').filter({ hasText: tipo }).first();
         await boton.waitFor({ state: 'visible' });
         await boton.click();
+        });
     }
 
     async seleccionarUsoCredito(uso: string) {
+        await allure.step(`Seleccionar Uso de crédito: ${uso}`, async () => {
         // exact: false para evitar errores por espacios invisibles en el HTML
         const boton = this.page.getByRole('button', { name: uso, exact: false });
         await boton.click();
         // Esperamos a que la calculadora procese el cambio de formulario
         await this.page.waitForTimeout(1000);
+        });
     }
 
     async ingresarIngresoMensual(monto: number) {
+        await allure.step(`Ingresar el ingreso mensual: ${monto}`, async () => {
         await this.txtIngresoMensual.fill(monto.toString());
         await this.txtIngresoMensual.press('Tab');
+         });
     }
 
     async ingresarMontoSolicitado(monto: number) {
+        await allure.step(`Ingresar Monto solicitado: ${monto}`, async () => {
         await this.txtMontoSolicitado.fill(monto.toString());
         await this.txtMontoSolicitado.press('Tab');
+        });
     }
 
     async seleccionarPlazo(plazo: number, min: number, max: number) {
+        await allure.step(`Seleccionar Plazo: ${plazo}`, async () => {
         await this.selectorPlazo.scrollIntoViewIfNeeded();
         const box = await this.selectorPlazo.boundingBox();
         if (box) {
@@ -66,9 +76,11 @@ export class CalcularCreditoPage {
             await this.page.mouse.click(clickX, box.y + box.height / 2);
             await this.page.waitForTimeout(500); 
         }
+      });
     }
 
    async seleccionarTasa(tasa: number, min: number, max: number) {
+        await allure.step(`Seleccionar Tasa: ${tasa}`, async () => {
         await this.selectorTasa.scrollIntoViewIfNeeded();
         const box = await this.selectorTasa.boundingBox();
         if (box) {
@@ -79,6 +91,7 @@ export class CalcularCreditoPage {
             await this.page.mouse.click(clickX, box.y + box.height / 2);
             await this.page.waitForTimeout(500);
         }
+         });
     }
 
     async validarResultados() {

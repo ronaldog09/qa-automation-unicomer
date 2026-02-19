@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import { Status } from 'allure-js-commons';
+import os from 'os';
 
 /**
  * Read environment variables from file.
@@ -13,7 +15,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
 
-    
+      
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: false,
@@ -24,9 +26,37 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1, 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  //reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 
+  reporter: [
+    ['list'],
+    ['allure-playwright', {
+      detail: false,
+      resultsDir: 'allure-results',
+      categories: [
+        {
+          name: 'Failed Tests',
+          matchedStatuses: [Status.FAILED, Status.BROKEN],
+        },
+        {
+          name: 'Passing Tests',
+          matchedStatuses: [Status.PASSED],
+        },
+        {
+          name: 'Skipped Tests',
+          matchedStatuses: [Status.SKIPPED],
+        },
+      ],
+      environmentInfo: {
+        os_platform: os.platform(),
+        os_release: os.release(),
+        os_version: os.version(),
+        node_version: process.version,
+      },
+    }],
+  ],
+  
   timeout: 60000, // 60 segundos por prueba
   use: {
 
@@ -38,9 +68,8 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    //trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    trace: 'retain-on-failure',
+    screenshot: 'on',
     video: 'retain-on-failure',
     headless: true,
   },
